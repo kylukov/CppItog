@@ -7,8 +7,7 @@
 using namespace std;
 
 int current = 0;
-string commands[11] = {
-        "Выход",
+string commands[10] = {
         "Добавить/удалить фамилию",
         "Добавить/удалить имя",
         "Добавить/удалить отчество",
@@ -30,6 +29,8 @@ void current_update(char operand){
         else current--;
     }
 }
+
+
 
 struct Date {
     unsigned short day;
@@ -134,6 +135,19 @@ void printDate(unsigned short day, unsigned short month, unsigned short year, in
 }
 */
 
+struct Student student[11] = {
+        {"Иванов",     "Иван",       "Иванович",      {01, 02, 2010}, 1975, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М"},
+        {"Кузнецов",   "Тимур",      "Николаевич",    {02, 07, 2012}, 2000, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М"},
+        {"Сидоров",    "Николай",    "Андреевич",     {21, 06, 2014}, 1990, "Добрый день",  "ПТ - 1", "МТ-03-19",   "1233Б4123", "М"},
+        {"Ковалев",    "Дмитрий",    "Сергеевич",     {15, 12, 2011}, 1985, "Здравствуйте", "ТР - 4", "ИКТ-01-19",  "1234Б4123", "М"},
+        {"Новикова",   "Елена",      "Ивановна",      {03, 01, 2015}, 1995, "Добрый день",  "КБ - 1", "БИСО-02-19", "1235Б4123", "Ж"},
+        {"Федоров",    "Вячеслав",   "Игоревич",      {22, 05, 2016}, 1996, "Привет",       "КДМ-2",  "ФИТ-01-19",  "1236Б4123", "М"},
+        {"Шишкин",     "Анатолий",   "Петрович",      {10, 01, 2018}, 2000, "Здравствуйте", "ПТ - 3", "МТ-02-19",   "1237Б4123", "М"},
+        {"Козлова",    "Анастасия",  "Васильевна",    {27, 11, 2017}, 1999, "Добрый день",  "ТР - 1", "ИКТ-02-19",  "1238Б4123", "Ж"},
+        {"Михайлов",   "Максим",     "Валерьевич",    {05, 02, 2019}, 2001, "Привет",       "КБ - 3", "БИСО-03-19", "1239Б4123", "М"},
+        {"Григорьева", "Александра", "Александровна", {18, 07, 2016}, 1996, "Здравствуйте", "КДМ-1",  "ФИТ-03-19",  "1240Б4123", "Ж"},
+        {"Попов",      "Илья",       "Олегович",      {30, 03, 2013}, 1988, "Добрый день",  "ПТ - 2", "МТ-01-19",   "1241Б4123", "М"}
+};
 
 
 void Draw_List_Of_Students(struct Student* student) {
@@ -169,22 +183,22 @@ void Draw_Task_Menu(struct Student* student){
     cout << setw( (64 - sizeof("Выберите команду")) / 2 + sizeof("Выберите команду")) << setfill(' ') << "Выберите команду" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     /// варианты команд
-    for(int i = 0; i < 11; i++){
+    for(int i = 0; i < 10; i++){
         if (i == current) { cout << "  >   "  << setfill(' ') << commands[i] << endl; continue;}
         else cout << "      "  << setfill(' ') << commands[i] << endl;
     }
     cout.width(64); cout.fill('-'); cout << "-" << endl;
 }
 
-void Edit_Student_Information(struct Student* student){
-    if (current == 1){
+void Edit_Student_Information(){
+    if (current == 0){
         cout << current;
         string edited_surname;
         cout << commands[1] << endl;
         cin >> edited_surname;
         student[current].surName = edited_surname;
     }
-    if (current == 2){
+    if (current == 1){
         cout << current;
         string edited_name;
         cout << commands[2] << endl;
@@ -193,24 +207,29 @@ void Edit_Student_Information(struct Student* student){
     }
 }
 
-void task_menu_navigation(struct Student* student, char a){
-    switch ((int)a) {
-        case 115: // s - down
-            current_update('+');
-            Draw_Task_Menu(student);
-            break;
-        case 119: // w - up
-            current_update('-');
-            Draw_Task_Menu(student);
-            break;
-        case 101: // e - edit
-            Edit_Student_Information(student);
-            Draw_Task_Menu(student);
-    }
 
+/*
+void task_menu_navigation(struct Student* student){
+    char a;
+    cout << (int)a << " " << current << endl;
+    while((a = getch())!= 27) {
+        switch ((int) a) {
+            case 115: // s - down
+                current_update('+');
+                Draw_Task_Menu(student);
+                break;
+            case 119: // w - up
+                current_update('-');
+                Draw_Task_Menu(student);
+                break;
+            case 101: // e - edit
+                Edit_Student_Information();
+                break;
+        }
+    }
 }
 
-void navigation(struct Student* student, char a){
+void student_navigation(struct Student* student, char a){
     switch ((int)a) {
         case 115: // s - down
             current_update('+');
@@ -220,41 +239,66 @@ void navigation(struct Student* student, char a){
             current_update('-');
             Draw_List_Of_Students(student);
             break;
-        case 102:
+        case 102: // f - choose
             current = 0;
             Draw_Task_Menu(student);
-            char b;
-            while((b = getch())!= 27)
-            {
-                task_menu_navigation(student, b);
-            }
+            task_menu_navigation(student);
     }
 }
+*/
 
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
-    struct Student student[11];
-
-    student[0] = {"Иванов", "Иван", "Иванович", {01, 02, 2010}, 1975, "Привет", "КБ - 2", "БИСО-01-19", "1231Б4123", "М" };
-    student[1] = {"Кузнецов", "Тимур", "Николаевич", {02, 07, 2012}, 2000, "Привет", "КБ - 2", "БИСО-01-19", "1231Б4123", "М" };
-    student[2] = {"Сидоров", "Николай", "Андреевич", {21, 06, 2014}, 1990, "Добрый день", "ПТ - 1", "МТ-03-19", "1233Б4123", "М" };
-    student[3] = {"Ковалев", "Дмитрий", "Сергеевич", {15, 12, 2011}, 1985, "Здравствуйте", "ТР - 4", "ИКТ-01-19", "1234Б4123", "М" };
-    student[4] = {"Новикова", "Елена", "Ивановна", {03, 01, 2015}, 1995, "Добрый день", "КБ - 1", "БИСО-02-19", "1235Б4123", "Ж" };
-    student[5] = {"Федоров", "Вячеслав", "Игоревич", {22, 05, 2016}, 1996, "Привет", "КДМ-2", "ФИТ-01-19", "1236Б4123", "М" };
-    student[6] = {"Шишкин", "Анатолий", "Петрович", {10, 01, 2018}, 2000, "Здравствуйте", "ПТ - 3", "МТ-02-19", "1237Б4123", "М" };
-    student[7] = {"Козлова", "Анастасия", "Васильевна", {27, 11, 2017}, 1999, "Добрый день", "ТР - 1", "ИКТ-02-19", "1238Б4123", "Ж" };
-    student[8] = {"Михайлов", "Максим", "Валерьевич", {05, 02, 2019}, 2001, "Привет", "КБ - 3", "БИСО-03-19", "1239Б4123", "М" };
-    student[9] = {"Григорьева", "Александра", "Александровна", {18, 07, 2016}, 1996, "Здравствуйте", "КДМ-1", "ФИТ-03-19", "1240Б4123", "Ж" };
-    student[10] = {"Попов", "Илья", "Олегович", {30, 03, 2013}, 1988, "Добрый день", "ПТ - 2", "МТ-01-19", "1241Б4123", "М" };
     cout << "Исходные данные:" << endl;
     Draw_List_Of_Students(student);
 
     char a;
-    while((a = getch())!= 27)
+    while((a = getch())!= 113)
     {
-        navigation(student, a);
+        switch ((int)a) {
+            case 115: // s - down
+                current_update('+');
+                Draw_List_Of_Students(student);
+                break;
+            case 119: // w - up
+                current_update('-');
+                Draw_List_Of_Students(student);
+                break;
+            case 102: // f - choose
+                Draw_Task_Menu(student);
+                current = 0;
+                char b;
+                while((b = getch())!= 113)
+                {
+                    cout << (int)b << endl;
+                    switch ((int)b) {
+                        case 115: // s - down
+                            current_update('+');
+                            Draw_Task_Menu(student);
+                            break;
+                        case 119: // w - up
+                            current_update('-');
+                            Draw_Task_Menu(student);
+                            break;
+                        case 102: // f - choose
+                            Edit_Student_Information();
+                            Draw_Task_Menu(student);
+                            break;
+                        case 113: // q - quit
+                            break;
+                    }
+                }
+                Draw_List_Of_Students(student);
+                break;
+        }
     }
+
+    Draw_Task_Menu(student);
+
+
+
+
 
     return 0;
 }
