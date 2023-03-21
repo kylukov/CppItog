@@ -3,10 +3,13 @@
 #include <windows.h>
 #include <iomanip>
 #include <conio.h>
+#include <fstream>
 
 using namespace std;
 
 int current = 0;
+int current_menu = 0;
+
 string commands[10] = {
         "Добавить/удалить фамилию",
         "Добавить/удалить имя",
@@ -30,6 +33,16 @@ void current_update(char operand){
     }
 }
 
+void current_menu_update(char operand){
+    if (operand == '+'){
+        if (current_menu == 10) current_menu = 0;
+        else current_menu++;
+    }
+    else if (operand == '-'){
+        if (current_menu == 0) current_menu = 10;
+        else current_menu--;
+    }
+}
 
 
 struct Date {
@@ -182,28 +195,79 @@ void Draw_Task_Menu(struct Student* student){
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     cout << setw( (64 - sizeof("Выберите команду")) / 2 + sizeof("Выберите команду")) << setfill(' ') << "Выберите команду" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
+
     /// варианты команд
     for(int i = 0; i < 10; i++){
-        if (i == current) { cout << "  >   "  << setfill(' ') << commands[i] << endl; continue;}
+        if (i == current_menu) { cout << "  >   "  << setfill(' ') << commands[i] << endl; continue;}
         else cout << "      "  << setfill(' ') << commands[i] << endl;
     }
     cout.width(64); cout.fill('-'); cout << "-" << endl;
 }
 
 void Edit_Student_Information(){
-    if (current == 0){
-        cout << current;
+    if (current_menu == 0){
         string edited_surname;
-        cout << commands[1] << endl;
+        cout << commands[0] << endl;
         cin >> edited_surname;
         student[current].surName = edited_surname;
     }
-    if (current == 1){
-        cout << current;
+    if (current_menu == 1){
         string edited_name;
-        cout << commands[2] << endl;
+        cout << commands[1] << endl;
         cin >> edited_name;
         student[current].name = edited_name;
+    }
+    if (current_menu == 2){
+        string tmp;
+        cout << commands[2] << endl;
+        cin >> tmp;
+        student[current].thirdName = tmp;
+    }
+    if (current_menu == 3){
+        string tmp;
+        cout << commands[3] << endl;
+        cin >> tmp;
+        student[current].cafedra = tmp;
+    }
+    if (current_menu == 4){
+        string tmp;
+        cout << commands[4] << endl;
+        cin >> tmp;
+        student[current].fac = tmp;
+    }
+    if (current_menu == 5){
+        string tmp;
+        cout << commands[5] << endl;
+        cin >> tmp;
+        student[current].group = tmp;
+    }
+    if (current_menu == 6){
+        string tmp;
+        cout << commands[6] << endl;
+        cin >> tmp;
+        student[current].personal_number = tmp;
+    }
+    if (current_menu == 7){
+        string tmp;
+        cout << commands[7] << endl;
+        cin >> tmp;
+        student[current].sex = tmp;
+    }
+    if (current_menu == 8){
+        int tmpday, tmpmonth, tmpyear;
+        cout << commands[8] << endl;
+        cout << "Введите день: " ; cin >> tmpday;
+        cout << "Введите месяц: " ; cin >> tmpmonth;
+        cout << "Введите год: " ; cin >> tmpyear;
+        student[current].date.day = tmpday;
+        student[current].date.month = tmpmonth;
+        student[current].date.year = tmpyear;
+    }
+    if (current_menu == 9){
+        unsigned int tmp;
+        cout << commands[9] << endl;
+        cin >> tmp;
+        student[current].year = tmp;
     }
 }
 
@@ -267,18 +331,16 @@ int main()
                 break;
             case 102: // f - choose
                 Draw_Task_Menu(student);
-                current = 0;
                 char b;
                 while((b = getch())!= 113)
                 {
-                    cout << (int)b << endl;
                     switch ((int)b) {
                         case 115: // s - down
-                            current_update('+');
+                            current_menu_update('+');
                             Draw_Task_Menu(student);
                             break;
                         case 119: // w - up
-                            current_update('-');
+                            current_menu_update('-');
                             Draw_Task_Menu(student);
                             break;
                         case 102: // f - choose
@@ -294,11 +356,11 @@ int main()
         }
     }
 
-    Draw_Task_Menu(student);
-
-
-
-
+    ofstream binariFstreamFile;
+    binariFstreamFile.open("binariFstreamFile.txt", ios_base::out | ios_base::binary);
+    binariFstreamFile << student;
+    binariFstreamFile.close();
 
     return 0;
+
 }
