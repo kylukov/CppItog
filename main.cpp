@@ -1,9 +1,17 @@
+//
+//  main.cpp
+//  CppLast
+//
+//  Created by Andrey Kulikov on 22.03.2023.
+//
+
 #include <iostream>
 #include <string>
-#include <windows.h>
-#include <iomanip>
-#include <conio.h>
 #include <fstream>
+#include <iomanip>
+#include <vector>
+#include <array>
+#include <windows.h>
 
 using namespace std;
 
@@ -24,25 +32,31 @@ string commands[10] = {
 };
 void current_update(char operand){
     if (operand == '+'){
-        if (current == 10) current = 0;
+        if (current == 11) current = 0;
         else current++;
     }
     else if (operand == '-'){
-        if (current == 0) current = 10;
+        if (current == 0) current = 11;
         else current--;
     }
+
 }
 
 void current_menu_update(char operand){
     if (operand == '+'){
-        if (current_menu == 10) current_menu = 0;
+        if (current_menu == 9) current_menu = 0;
         else current_menu++;
     }
     else if (operand == '-'){
-        if (current_menu == 0) current_menu = 10;
+        if (current_menu == 0) current_menu = 9;
         else current_menu--;
     }
 }
+
+struct Lesson {
+    string name_of_lesson;
+    unsigned short mark;
+};
 
 
 struct Date {
@@ -63,103 +77,21 @@ struct Student
     string group;
     string personal_number;
     string sex;
+    vector<Lesson> marks;
 };
 
-/*
-void DrawLine() {
-    for (int i = 0; i < 80; i++) {
-        cout << "-";
-    }
-    cout << "\n";
-}
-
-char* GetSpacebar(int count) {
-    char* msg = new char[count];
-    for (int i = 0; i < count; i++)
-    {
-        msg[i] = ' ';
-    }
-    msg[count] = '\0';
-    return msg;
-}
-
-int GetSize(char* msg) {
-    int size = 0;
-    while (msg[size] != '\0')
-        size++;
-    return size;
-}
-
-void DrawWrong(struct Student* student) {
-    DrawLine();
-    cout << "| Отдел кадров" << GetSpacebar(80 - sizeof("| Отдел кадров")) << "|\n";
-    DrawLine();
-    //|Фамилия |Инициалы |Год рожд | Оклад|
-    cout << "| Фамилия" << GetSpacebar(21 - sizeof("| Фамилия"));
-    cout << "| Инициалы" << GetSpacebar(21 - sizeof("| Инициалы"));
-    cout << "| Год рожд" << GetSpacebar(21 - sizeof("| Год рожд"));
-    cout << "| Оклад" << GetSpacebar(20 - sizeof("| Оклад")) << "|\n";
-    DrawLine();
-    for (int i = 0; i < 3; i++) {
-        cout << "| " << student[i].surName << GetSpacebar(18 - GetSize(student[i].surName));
-        cout << "| " << student[i].ident << GetSpacebar(18 - GetSize(student[i].ident));
-        cout << "| " << student[i].year << GetSpacebar(18 - to_string(student[i].year).size());
-        cout << "| " << student[i].salary << GetSpacebar(22 - to_string(student[i].salary).size()) << "|\n";
-        //cout << "| " << student[i].salary << GetSpacebar(22 - to_string(student[i].salary).size()) << "|\n";
-        DrawLine();
-    }
-    cout << "| Примечание: оклад установлен по состоянию на 1 января 2000 года" << GetSpacebar(80 - sizeof("| Примечание: оклад установлен по состоянию на 1 января 2000 года")) << "|\n";
-    DrawLine();
-}
-
-
-void myCentr(string s, int wLine) {
-
-    int w = s.length();
-    int delta = (wLine - w) / 2;
-    cout << left;
-    cout.width(delta); cout << " ";
-    cout << s;
-    cout.width(delta + 1); cout << " ";
-
-}
-
-void printDate(unsigned short day, unsigned short month, unsigned short year, int wLine) {
-    int w = 10;
-    int delta = (wLine - w) / 2 - 1;
-    cout << left;
-    cout.width(delta); cout << " ";
-    if (day > 9) {
-        cout << day;
-    }
-    else {
-        cout << "0" << day;
-    }
-    cout << ".";
-    if (month > 9) {
-        cout << month;
-    }
-    else {
-        cout << "0" << month;
-    }
-    cout << ".";
-    cout << year;
-    cout.width(delta); cout << " ";
-}
-*/
-
 struct Student student[11] = {
-        {"Иванов",     "Иван",       "Иванович",      {01, 02, 2010}, 1975, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М"},
-        {"Кузнецов",   "Тимур",      "Николаевич",    {02, 07, 2012}, 2000, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М"},
-        {"Сидоров",    "Николай",    "Андреевич",     {21, 06, 2014}, 1990, "Добрый день",  "ПТ - 1", "МТ-03-19",   "1233Б4123", "М"},
-        {"Ковалев",    "Дмитрий",    "Сергеевич",     {15, 12, 2011}, 1985, "Здравствуйте", "ТР - 4", "ИКТ-01-19",  "1234Б4123", "М"},
-        {"Новикова",   "Елена",      "Ивановна",      {03, 01, 2015}, 1995, "Добрый день",  "КБ - 1", "БИСО-02-19", "1235Б4123", "Ж"},
-        {"Федоров",    "Вячеслав",   "Игоревич",      {22, 05, 2016}, 1996, "Привет",       "КДМ-2",  "ФИТ-01-19",  "1236Б4123", "М"},
-        {"Шишкин",     "Анатолий",   "Петрович",      {10, 01, 2018}, 2000, "Здравствуйте", "ПТ - 3", "МТ-02-19",   "1237Б4123", "М"},
-        {"Козлова",    "Анастасия",  "Васильевна",    {27, 11, 2017}, 1999, "Добрый день",  "ТР - 1", "ИКТ-02-19",  "1238Б4123", "Ж"},
-        {"Михайлов",   "Максим",     "Валерьевич",    {05, 02, 2019}, 2001, "Привет",       "КБ - 3", "БИСО-03-19", "1239Б4123", "М"},
-        {"Григорьева", "Александра", "Александровна", {18, 07, 2016}, 1996, "Здравствуйте", "КДМ-1",  "ФИТ-03-19",  "1240Б4123", "Ж"},
-        {"Попов",      "Илья",       "Олегович",      {30, 03, 2013}, 1988, "Добрый день",  "ПТ - 2", "МТ-01-19",   "1241Б4123", "М"}
+        {"Иванов",     "Иван",       "Иванович",      {01, 02, 2010}, 1975, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М", {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}},
+        {"Кузнецов",   "Тимур",      "Николаевич",    {02, 07, 2012}, 2000, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М", {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}},
+        {"Сидоров",    "Николай",    "Андреевич",     {21, 06, 2014}, 1990, "Добрый день",  "ПТ - 1", "МТ-03-19",   "1233Б4123", "М", {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}},
+        {"Ковалев",    "Дмитрий",    "Сергеевич",     {15, 12, 2011}, 1985, "Здравствуйте", "ТР - 4", "ИКТ-01-19",  "1234Б4123", "М", {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}},
+        {"Новикова",   "Елена",      "Ивановна",      {03, 01, 2015}, 1995, "Добрый день",  "КБ - 1", "БИСО-02-19", "1235Б4123", "Ж", {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}},
+        {"Федоров",    "Вячеслав",   "Игоревич",      {22, 05, 2016}, 1996, "Привет",       "КДМ-2",  "ФИТ-01-19",  "1236Б4123", "М", {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}},
+        {"Шишкин",     "Анатолий",   "Петрович",      {10, 01, 2018}, 2000, "Здравствуйте", "ПТ - 3", "МТ-02-19",   "1237Б4123", "М", {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}},
+        {"Козлова",    "Анастасия",  "Васильевна",    {27, 11, 2017}, 1999, "Добрый день",  "ТР - 1", "ИКТ-02-19",  "1238Б4123", "Ж", {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}},
+        {"Михайлов",   "Максим",     "Валерьевич",    {05, 02, 2019}, 2001, "Привет",       "КБ - 3", "БИСО-03-19", "1239Б4123", "М", {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}},
+        {"Григорьева", "Александра", "Александровна", {18, 07, 2016}, 1996, "Здравствуйте", "КДМ-1",  "ФИТ-03-19",  "1240Б4123", "Ж", {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}},
+        {"Попов",      "Илья",       "Олегович",      {30, 03, 2013}, 1988, "Добрый день",  "ПТ - 2", "МТ-01-19",   "1241Б4123", "М", {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}}
 };
 
 
@@ -168,13 +100,15 @@ void Draw_List_Of_Students(struct Student* student) {
     cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     for (int i = 0; i < 11; i++) {
-        string FIO = to_string(i) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
+        string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
         if (i == current) {
             cout << "  >   " << setfill(' ') << FIO << endl; continue;
         }
         else {
             cout << "      "  << setfill(' ') << FIO << endl; }
     }
+
+    cout << "      ВАРИАНТ 41" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
 
 }
@@ -192,10 +126,14 @@ void Draw_Task_Menu(struct Student* student){
     cout << "      Год поступления в ВУЗ: " << student[current].date.day << "." << student[current].date.month << "." << student[current].date.year << endl;
     cout << "      Дата рождения: " << student[current].year << endl;
 
+    cout << "      Текущие оценки" << endl;
+    for(int i = 0; i < student[current].marks.size(); i++){
+        cout << "      - " << student[current].marks[i].name_of_lesson << ": " << student[current].marks[i].mark << endl;
+    }
+
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     cout << setw( (64 - sizeof("Выберите команду")) / 2 + sizeof("Выберите команду")) << setfill(' ') << "Выберите команду" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
-
     /// варианты команд
     for(int i = 0; i < 10; i++){
         if (i == current_menu) { cout << "  >   "  << setfill(' ') << commands[i] << endl; continue;}
@@ -205,120 +143,109 @@ void Draw_Task_Menu(struct Student* student){
 }
 
 void Edit_Student_Information(){
-    if (current_menu == 0){
-        string edited_surname;
-        cout << commands[0] << endl;
-        cin >> edited_surname;
-        student[current].surName = edited_surname;
-    }
-    if (current_menu == 1){
-        string edited_name;
-        cout << commands[1] << endl;
-        cin >> edited_name;
-        student[current].name = edited_name;
-    }
-    if (current_menu == 2){
-        string tmp;
-        cout << commands[2] << endl;
-        cin >> tmp;
-        student[current].thirdName = tmp;
-    }
-    if (current_menu == 3){
-        string tmp;
-        cout << commands[3] << endl;
-        cin >> tmp;
-        student[current].cafedra = tmp;
-    }
-    if (current_menu == 4){
-        string tmp;
-        cout << commands[4] << endl;
-        cin >> tmp;
-        student[current].fac = tmp;
-    }
-    if (current_menu == 5){
-        string tmp;
-        cout << commands[5] << endl;
-        cin >> tmp;
-        student[current].group = tmp;
-    }
-    if (current_menu == 6){
-        string tmp;
-        cout << commands[6] << endl;
-        cin >> tmp;
-        student[current].personal_number = tmp;
-    }
-    if (current_menu == 7){
-        string tmp;
-        cout << commands[7] << endl;
-        cin >> tmp;
-        student[current].sex = tmp;
-    }
-    if (current_menu == 8){
-        int tmpday, tmpmonth, tmpyear;
-        cout << commands[8] << endl;
-        cout << "Введите день: " ; cin >> tmpday;
-        cout << "Введите месяц: " ; cin >> tmpmonth;
-        cout << "Введите год: " ; cin >> tmpyear;
-        student[current].date.day = tmpday;
-        student[current].date.month = tmpmonth;
-        student[current].date.year = tmpyear;
-    }
-    if (current_menu == 9){
-        unsigned int tmp;
-        cout << commands[9] << endl;
-        cin >> tmp;
-        student[current].year = tmp;
-    }
-}
-
-
-/*
-void task_menu_navigation(struct Student* student){
-    char a;
-    cout << (int)a << " " << current << endl;
-    while((a = getch())!= 27) {
-        switch ((int) a) {
-            case 115: // s - down
-                current_update('+');
-                Draw_Task_Menu(student);
-                break;
-            case 119: // w - up
-                current_update('-');
-                Draw_Task_Menu(student);
-                break;
-            case 101: // e - edit
-                Edit_Student_Information();
-                break;
+    switch (current_menu) {
+        case 0:
+        {
+            string edited_surname;
+            cout << commands[0] << endl;
+            cin >> edited_surname;
+            student[current].surName = edited_surname;
+            break;
         }
+        case 1:
+        {
+            string edited_name;
+            cout << commands[1] << endl;
+            cin >> edited_name;
+            student[current].name = edited_name;
+            break;
+        }
+        case 2:
+        {
+            string edited_name;
+            cout << commands[2] << endl;
+            cin >> edited_name;
+            student[current].thirdName = edited_name;
+            break;
+        }
+        case 3:
+        {
+            string edited_name;
+            cout << commands[3] << endl;
+            cin >> edited_name;
+            student[current].cafedra = edited_name;
+            break;
+        }
+        case 4:
+        {
+            string edited_name;
+            cout << commands[4] << endl;
+            cin >> edited_name;
+            student[current].fac = edited_name;
+            break;
+        }
+        case 5:
+        {
+            string edited_name;
+            cout << commands[5] << endl;
+            cin >> edited_name;
+            student[current].group = edited_name;
+            break;
+        }
+        case 6:
+        {
+            string edited_name;
+            cout << commands[6] << endl;
+            cin >> edited_name;
+            student[current].personal_number = edited_name;
+            break;
+        }
+        case 7:
+        {
+            string edited_name;
+            cout << commands[7] << endl;
+            cout << "M - мужской; Ж - женский" << endl;
+            cin >> edited_name;
+            student[current].sex = edited_name;
+            break;
+        }
+        case 8:
+        {
+            unsigned short edited_name;
+            cout << commands[8] << endl;
+            cin >> edited_name;
+            student[current].year = edited_name;
+            break;
+        }
+        case 9:
+        {
+            unsigned short day, month, year;
+            cout << commands[9] << endl;
+
+            cout << "Введите день: ";
+            cin >> day;
+
+            cout << "Введите месяц: ";
+            cin >> month;
+
+            cout << "Введите год: ";
+            cin >> year;
+            student[current].date.day = day;
+            student[current].date.month = month;
+            student[current].date.year = year;
+            break;
+        }
+        default:
+            cout << "Ошибка отображения навигационного меню, попробуйте снова";
+            current_menu = 0;
+            break;
     }
 }
 
-void student_navigation(struct Student* student, char a){
-    switch ((int)a) {
-        case 115: // s - down
-            current_update('+');
-            Draw_List_Of_Students(student);
-            break;
-        case 119: // w - up
-            current_update('-');
-            Draw_List_Of_Students(student);
-            break;
-        case 102: // f - choose
-            current = 0;
-            Draw_Task_Menu(student);
-            task_menu_navigation(student);
-    }
-}
-*/
-
-int main()
-{
-    SetConsoleOutputCP(CP_UTF8);
-    cout << "Исходные данные:" << endl;
+void create_navigation(){
     Draw_List_Of_Students(student);
-
     char a;
-    while((a = getch())!= 113)
+    while((a = getchar())!= 113)
     {
         switch ((int)a) {
             case 115: // s - down
@@ -332,7 +259,7 @@ int main()
             case 102: // f - choose
                 Draw_Task_Menu(student);
                 char b;
-                while((b = getch())!= 113)
+                while((b = getchar())!= 113)
                 {
                     switch ((int)b) {
                         case 115: // s - down
@@ -355,12 +282,25 @@ int main()
                 break;
         }
     }
+}
 
-    ofstream binariFstreamFile;
-    binariFstreamFile.open("binariFstreamFile.txt", ios_base::out | ios_base::binary);
-    binariFstreamFile << student;
-    binariFstreamFile.close();
+int main()
+{
+    //SetConsoleOutputCP(CP_UTF8);
+    //SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    //setlocale(LC_ALL, "Russian");
+    create_navigation();
 
+    // Открываем файл в режиме записи в двоичном формате
+    ofstream out("students.bin", ios::binary);
+
+    // Записываем массив студентов в файл
+    out.write(reinterpret_cast<char*>(&student), sizeof(student));
+
+    // Закрываем файл
+    out.close();
+
+    cout << "Массив студентов записан в бинарный файл 'students.bin'" << endl;
     return 0;
-
 }
