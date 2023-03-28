@@ -11,7 +11,6 @@
 #include <iomanip>
 #include <vector>
 #include <array>
-#include <windows.h>
 
 using namespace std;
 
@@ -31,6 +30,7 @@ string commands[10] = {
         "Добавить/удалить дату рождения"
 };
 void current_update(char operand){
+    system("clear");
     if (operand == '+'){
         if (current == 11) current = 0;
         else current++;
@@ -43,6 +43,7 @@ void current_update(char operand){
 }
 
 void current_menu_update(char operand){
+    system("clear");
     if (operand == '+'){
         if (current_menu == 9) current_menu = 0;
         else current_menu++;
@@ -257,6 +258,7 @@ void create_navigation(){
                 Draw_List_Of_Students(student);
                 break;
             case 102: // f - choose
+                system("clear");
                 Draw_Task_Menu(student);
                 char b;
                 while((b = getchar())!= 113)
@@ -271,6 +273,7 @@ void create_navigation(){
                             Draw_Task_Menu(student);
                             break;
                         case 102: // f - choose
+                            system("clear");
                             Edit_Student_Information();
                             Draw_Task_Menu(student);
                             break;
@@ -288,7 +291,6 @@ int main()
 {
     //SetConsoleOutputCP(CP_UTF8);
     //SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);
     //setlocale(LC_ALL, "Russian");
     create_navigation();
 
