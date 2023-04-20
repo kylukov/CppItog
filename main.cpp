@@ -57,6 +57,12 @@ struct Student
     char sex[40];
     //vector<Lesson> marks;
 };
+
+struct FIO{
+    char surName[40];
+    char name[40];
+    char thirdName[40];
+};
 // {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}
 struct Student student[11] = {
         {"Иванов",     "Иван",       "Иванович",      {01, 02, 2010}, 1975, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М"},
@@ -102,17 +108,132 @@ void Draw_List_Of_Students(struct Student* student) {
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
-    for (int i = 0; i < amount_of_students; i++) {
-        string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
-        if (i == current) {
-            cout << "  >   " << setfill(' ') << FIO << endl; continue;
+    if (current != 11){
+        for (int i = 0; i < amount_of_students; i++) {
+            string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
+            if (i == current) {
+                cout << "  >   " << setfill(' ') << FIO << endl; continue;
+            }
+            else {
+                cout << "      "  << setfill(' ') << FIO << endl; }
         }
-        else {
-            cout << "      "  << setfill(' ') << FIO << endl; }
+
+        cout << "      ВАРИАНТ 41" << endl;
+        cout.width(64); cout.fill('-'); cout << "-" << endl;
+    }
+    else {
+        for (int i = 0; i < amount_of_students; i++) {
+            string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
+            if (i == current) {
+                cout << "  >   " << setfill(' ') << FIO << endl; continue;
+            }
+            else {
+                cout << "      "  << setfill(' ') << FIO << endl; }
+        }
+
+        cout << "  >   ВАРИАНТ 41" << endl;
+        cout.width(64); cout.fill('-'); cout << "-" << endl;
     }
 
-    cout << "      ВАРИАНТ 41" << endl;
-    cout.width(64); cout.fill('-'); cout << "-" << endl;
+}
+
+int show_how_many_male(){
+    int amount = 0;
+    for(int i = 0; i < amount_of_students; i++){
+        if (strcmp(student[i].sex, "М") == 0) amount++;
+    }
+    return amount;
+}
+
+int show_how_many_female(){
+    int amount = 0;
+    for(int i = 0; i < amount_of_students; i++){
+        if (strcmp(student[i].sex, "Ж") == 0) amount++;
+    }
+    return amount;
+}
+
+
+void make_41_variant(){
+    char b;
+    while((b = getchar())!= 113) {
+        const int male_amount = show_how_many_male();
+        char male[male_amount][128];
+        int male_index = 0;
+        for (int i = 0; i < amount_of_students; i++) {
+            char current_male[128];
+            strcpy(current_male, "");
+            strcpy(male[male_index], "");
+            if (strcmp(student[i].sex, "М") == 0) {
+                strcat(current_male, student[i].surName);
+                strcat(current_male, " ");
+                strcat(current_male, student[i].name);
+                strcat(current_male, " ");
+                strcat(current_male, student[i].thirdName);
+                strcat(male[male_index], current_male);
+                male_index++;
+            }
+        }
+
+        for (int i = 0; i < male_amount; i++) {
+            for (int j = i + 1; j < male_amount; j++) {
+                if (strcmp(male[i], male[j]) > 0) {
+                    swap(male[i], male[j]);
+                }
+            }
+        }
+        cout << "        Отсортированые списки" << endl;
+        cout.width(64);
+        cout.fill('-');
+        cout << "-" << endl;
+        cout << "        Мужчины" << endl;
+        cout.width(64);
+        cout.fill('-');
+        cout << "-" << endl;
+        for (int i = 0; i < male_amount; i++) {
+            cout << "      " << male[i] << endl;
+        }
+
+        const int female_amount = show_how_many_female();
+        char female[female_amount][128];
+        int female_index = 0;
+        for (int i = 0; i < amount_of_students; i++) {
+            char current_female[128];
+            strcpy(current_female, "");
+            strcpy(female[female_index], "");
+            if (strcmp(student[i].sex, "Ж") == 0) {
+                strcat(current_female, student[i].surName);
+                strcat(current_female, " ");
+                strcat(current_female, student[i].name);
+                strcat(current_female, " ");
+                strcat(current_female, student[i].thirdName);
+                strcat(female[female_index], current_female);
+                female_index++;
+            }
+        }
+        cout.width(64);
+        cout.fill('-');
+        cout << "-" << endl;
+        cout << "        Женщины" << endl;
+        cout.width(64);
+        cout.fill('-');
+        cout << "-" << endl;
+
+        for (int i = 0; i < female_amount; i++) {
+            for (int j = i + 1; j < female_amount; j++) {
+                if (strcmp(female[i], female[j]) > 0) {
+                    swap(female[i], female[j]);
+                }
+            }
+        }
+
+        for (int i = 0; i < female_amount; i++) {
+            cout << "      " << female[i] << endl;
+        }
+        cout.width(64);
+        cout.fill('-');
+        cout << "-" << endl;
+    }
 
 }
 
@@ -264,32 +385,40 @@ void create_navigation(){
                 break;
             case 102: // f - choose
                 system("clear");
-                Draw_Task_Menu(student);
-                char b;
-                while((b = getchar())!= 113)
-                {
-                    switch ((int)b) {
-                        case 115: // s - down
-                            current_menu_update('+');
-                            Draw_Task_Menu(student);
-                            break;
-                        case 119: // w - up
-                            current_menu_update('-');
-                            Draw_Task_Menu(student);
-                            break;
-                        case 102: // f - choose
-                            system("clear");
-                            Edit_Student_Information();
-                            Draw_Task_Menu(student);
-                            break;
-                        case 113: // q - quit
-                            break;
-                    }
+                if(current == 11) {
+                    make_41_variant();
+                    current = 0;
+                    system("clear");
+                    create_navigation();
                 }
-                current_menu = 0;
-                system("clear");
-                Draw_List_Of_Students(student);
-                break;
+                else {
+                    Draw_Task_Menu(student);
+                    char b;
+                    while((b = getchar())!= 113)
+                    {
+                        switch ((int)b) {
+                            case 115: // s - down
+                                current_menu_update('+');
+                                Draw_Task_Menu(student);
+                                break;
+                            case 119: // w - up
+                                current_menu_update('-');
+                                Draw_Task_Menu(student);
+                                break;
+                            case 102: // f - choose
+                                system("clear");
+                                Edit_Student_Information();
+                                Draw_Task_Menu(student);
+                                break;
+                            case 113: // q - quit
+                                break;
+                        }
+                    }
+                    current_menu = 0;
+                    system("clear");
+                    Draw_List_Of_Students(student);
+                    break;
+                }
             case 113:
                 ofstream fout("STR.bin", ios::binary);
 
