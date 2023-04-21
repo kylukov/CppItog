@@ -12,6 +12,7 @@
 #include <cstdio>
 #include <cstring>
 
+
 using namespace std;
 
 int current = 0;
@@ -54,7 +55,7 @@ struct Student
     char group[40];
     char personal_number[40];
     char sex[40];
-    Lesson marks[9][10];
+    Lesson marks[2][1];
 };
 
 /* {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}
