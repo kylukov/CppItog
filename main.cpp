@@ -71,8 +71,25 @@ struct Student students[11] = {
         {"Григорьева", "Александра", "Александровна", {18, 07, 2016}, 1996, "Здравствуйте", "КДМ-1",  "ФИТ-03-19",  "1240Б4123", "Ж"},
         {"Попов",      "Илья",       "Олегович",      {30, 03, 2013}, 1988, "Добрый день",  "ПТ - 2", "МТ-01-19",   "1241Б4123", "М"}
 };
- */
 
+
+void download_students(){
+    Student students[11];
+    ifstream fin("students.dat", ios::binary);
+
+    if(fin)
+    {
+        for(int i = 0; i < 11; i++)
+        {
+            fin.read((char*)&students[i], sizeof(Student));
+        }
+    }
+    else
+    {
+        // Обработка ошибки открытия файла
+        cout << "Ошибка открытия файла!" << endl;
+    }
+} */
 
 void current_update(char operand){
     system("clear");
@@ -134,21 +151,17 @@ void Draw_List_Of_Students(struct Student* student, int amount_of_students) {
 
 int show_how_many_male(struct Student *students, int amount_of_students){
     int amount = 0;
-    for(int i = 0; i < amount_of_students; i++){
+    for(int i = 0; i < amount_of_students; i++)
         if (strcmp(students[i].sex, "М") == 0) amount++;
-    }
     return amount;
 }
 
 int show_how_many_female(struct Student *students, int amount_of_students){
     int amount = 0;
-    for(int i = 0; i < amount_of_students; i++){
+    for(int i = 0; i < amount_of_students; i++)
         if (strcmp(students[i].sex, "Ж") == 0) amount++;
-    }
     return amount;
 }
-
-
 
 void make_41_variant(struct Student *students, int amount_of_students){
     char b;
@@ -161,10 +174,8 @@ void make_41_variant(struct Student *students, int amount_of_students){
             strcpy(current_male, "");
             strcpy(male[male_index], "");
             if (strcmp(students[i].sex, "М") == 0) {
-                strcat(current_male, students[i].surName);
-                strcat(current_male, " ");
-                strcat(current_male, students[i].name);
-                strcat(current_male, " ");
+                strcat(current_male, students[i].surName); strcat(current_male, " ");
+                strcat(current_male, students[i].name); strcat(current_male, " ");
                 strcat(current_male, students[i].thirdName);
                 strcat(male[male_index], current_male);
                 male_index++;
@@ -173,9 +184,8 @@ void make_41_variant(struct Student *students, int amount_of_students){
 
         for (int i = 0; i < male_amount; i++) {
             for (int j = i + 1; j < male_amount; j++) {
-                if (strcmp(male[i], male[j]) > 0) {
+                if (strcmp(male[i], male[j]) > 0)
                     swap(male[i], male[j]);
-                }
             }
         }
         cout << "        Отсортированые списки" << endl;
@@ -198,22 +208,16 @@ void make_41_variant(struct Student *students, int amount_of_students){
             strcpy(current_female, "");
             strcpy(female[female_index], "");
             if (strcmp(students[i].sex, "Ж") == 0) {
-                strcat(current_female, students[i].surName);
-                strcat(current_female, " ");
-                strcat(current_female, students[i].name);
-                strcat(current_female, " ");
+                strcat(current_female, students[i].surName); strcat(current_female, " ");
+                strcat(current_female, students[i].name); strcat(current_female, " ");
                 strcat(current_female, students[i].thirdName);
                 strcat(female[female_index], current_female);
                 female_index++;
             }
         }
-        cout.width(64);
-        cout.fill('-');
-        cout << "-" << endl;
+        cout.width(64); cout.fill('-'); cout << "-" << endl;
         cout << "        Женщины" << endl;
-        cout.width(64);
-        cout.fill('-');
-        cout << "-" << endl;
+        cout.width(64); cout.fill('-'); cout << "-" << endl;
 
         for (int i = 0; i < female_amount; i++) {
             for (int j = i + 1; j < female_amount; j++) {
@@ -230,6 +234,7 @@ void make_41_variant(struct Student *students, int amount_of_students){
         cout.fill('-');
         cout << "-" << endl;
     }
+
 
 }
 
@@ -411,7 +416,7 @@ void create_navigation(struct Student *students, int amount_of_students){
                 }
             case 113:
                 ofstream fout("students.dat", ios::binary);
-                for(int i = 0; i < 11; i++)
+                for(int i = 0; i < amount_of_students; i++)
                     fout.write((char*)&students[i], sizeof(Student));
                 fout.close();
                 return;
@@ -427,28 +432,14 @@ int main()
     if(fin)
     {
         for(int i = 0; i < 11; i++)
-        {
             fin.read((char*)&students[i], sizeof(Student));
-        }
     }
     else
-    {
-        // Обработка ошибки открытия файла
         cout << "Ошибка открытия файла!" << endl;
-    }
+
 
     int amounts_of_people = sizeof(students) / sizeof(Student);
 
-    for(int i = 0; i < 11; i++) {
-        cout << students[i].surName << " " << students[i].name << " " << students[i].thirdName << " ";
-        cout  << students[i].date.day << "." << students[i].date.month << "."
-             << students[i].date.year << " ";
-        cout  << endl;
-    }
-
-
-
-// Закрываем файл
     fin.close();
 
     create_navigation(students, amounts_of_people);
