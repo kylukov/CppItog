@@ -59,6 +59,7 @@ struct Student
 };
 
 /* {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}
+
 struct Student students[11] = {
         {"Иванов",     "Иван",       "Иванович",      {01, 02, 2010}, 1975, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М"},
         {"Кузнецов",   "Тимур",      "Николаевич",    {02, 07, 2012}, 2000, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М"},
@@ -72,7 +73,7 @@ struct Student students[11] = {
         {"Григорьева", "Александра", "Александровна", {18, 07, 2016}, 1996, "Здравствуйте", "КДМ-1",  "ФИТ-03-19",  "1240Б4123", "Ж"},
         {"Попов",      "Илья",       "Олегович",      {30, 03, 2013}, 1988, "Добрый день",  "ПТ - 2", "МТ-01-19",   "1241Б4123", "М"}
 };
-
+*/
 
 void download_students(){
     Student students[11];
@@ -90,7 +91,7 @@ void download_students(){
         // Обработка ошибки открытия файла
         cout << "Ошибка открытия файла!" << endl;
     }
-} */
+}
 
 void current_update(char operand){
     system("clear");
@@ -427,22 +428,27 @@ void create_navigation(struct Student *students, int amount_of_students){
 
 int main()
 {
-    Student students[11];
+    Student student[11];
     ifstream fin("students.dat", ios::binary);
 
+// Если файл открыт успешно, то читаем данные из него в массив
     if(fin)
     {
+        // Считываем по одному элементу массива из файла
         for(int i = 0; i < 11; i++)
-            fin.read((char*)&students[i], sizeof(Student));
+        {
+            fin.read((char*)&student[i], sizeof(Student));
+        }
     }
     else
+    {
+        // Обработка ошибки открытия файла
         cout << "Ошибка открытия файла!" << endl;
+    }
 
-
-    int amounts_of_people = sizeof(students) / sizeof(Student);
-
+// Закрываем файл
     fin.close();
-
-    create_navigation(students, amounts_of_people);
+    int amounts_of_people = 11;
+    create_navigation(student, amounts_of_people);
     return 0;
 }
