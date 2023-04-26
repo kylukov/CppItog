@@ -33,7 +33,7 @@ string commands[10] = {
 
 struct Lesson {
     string name_of_lesson;
-    unsigned short mark;
+    unsigned short mark{};
 };
 
 
@@ -45,16 +45,16 @@ struct Date {
 
 struct Student
 {
-    char surName[40];
-    char name[40];
-    char thirdName[40];
-    struct Date date;
-    unsigned short year;
-    char fac[40];
-    char cafedra[40];
-    char group[40];
-    char personal_number[40];
-    char sex[40];
+    char surName[40]{};
+    char name[40]{};
+    char thirdName[40]{};
+    struct Date date{};
+    unsigned short year{};
+    char fac[40]{};
+    char cafedra[40]{};
+    char group[40]{};
+    char personal_number[40]{};
+    char sex[40]{};
     Lesson marks[2][1];
 };
 
@@ -96,11 +96,11 @@ void download_students(){
 void current_update(char operand){
     system("clear");
     if (operand == '+'){
-        if (current == 11) current = 0;
+        if (current == 12) current = 0;
         else current++;
     }
     else if (operand == '-'){
-        if (current == 0) current = 11;
+        if (current == 0) current = 12;
         else current--;
     }
 
@@ -118,11 +118,48 @@ void current_menu_update(char operand){
     }
 }
 
-void Draw_List_Of_Students(struct Student* student, int amount_of_students) {
+void Draw_41_variant_choosen(struct Student* student, int amount_of_students, int current){
+    system("clear");
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
-    if (current != 11){
+    for (int i = 0; i < amount_of_students; i++) {
+        string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
+        if (i == current) {
+            cout << "  >   " << setfill(' ') << FIO << endl; continue;
+        }
+        else {
+            cout << "      "  << setfill(' ') << FIO << endl; }
+    }
+
+    cout << "  >   ВАРИАНТ 41" << endl;
+    cout << "      Добавить нового студента" << endl;
+    cout.width(64); cout.fill('-'); cout << "-" << endl;
+}
+
+void Draw_Add_New_Student(struct Student* student, int amount_of_students, int current){
+    system("clear");
+    cout.width(64); cout.fill('-'); cout << "-" << endl;
+    cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
+    cout.width(64); cout.fill('-'); cout << "-" << endl;
+    for (int i = 0; i < amount_of_students; i++) {
+        string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
+        if (i == current) {
+            cout << "  >   " << setfill(' ') << FIO << endl; continue;
+        }
+        else {
+            cout << "      "  << setfill(' ') << FIO << endl; }
+    }
+    cout << "      ВАРИАНТ 41" << endl;
+    cout << "  >   Добавить нового студента" << endl;
+    cout.width(64); cout.fill('-'); cout << "-" << endl;
+}
+
+void Draw_List_Of_Students(struct Student* student, int amount_of_students, int current) {
+    cout.width(64); cout.fill('-'); cout << "-" << endl;
+    cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
+    cout.width(64); cout.fill('-'); cout << "-" << endl;
+    if (current != 11 && current != 12){
         for (int i = 0; i < amount_of_students; i++) {
             string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
             if (i == current) {
@@ -133,22 +170,15 @@ void Draw_List_Of_Students(struct Student* student, int amount_of_students) {
         }
 
         cout << "      ВАРИАНТ 41" << endl;
+        cout << "      Добавить нового студента" << endl;
         cout.width(64); cout.fill('-'); cout << "-" << endl;
+    }
+    else if(current == 11) {
+        Draw_41_variant_choosen(student, amount_of_students, current);
     }
     else {
-        for (int i = 0; i < amount_of_students; i++) {
-            string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
-            if (i == current) {
-                cout << "  >   " << setfill(' ') << FIO << endl; continue;
-            }
-            else {
-                cout << "      "  << setfill(' ') << FIO << endl; }
-        }
-
-        cout << "  >   ВАРИАНТ 41" << endl;
-        cout.width(64); cout.fill('-'); cout << "-" << endl;
+        Draw_Add_New_Student(student, amount_of_students, current);
     }
-
 }
 
 int show_how_many_male(struct Student *students, int amount_of_students){
@@ -240,7 +270,7 @@ void make_41_variant(struct Student *students, int amount_of_students){
 
 }
 
-void Draw_Task_Menu(struct Student* student){
+void Draw_Task_Menu(struct Student* student, int current, int current_menu){
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     /// данные о студенте
     cout << setw( (64 - sizeof("Информация о студенте")) / 2 + sizeof("Информация о студенте")) << setfill(' ') << "Информация о студенте" << endl;
@@ -262,6 +292,7 @@ void Draw_Task_Menu(struct Student* student){
     }
     cout.width(64); cout.fill('-'); cout << "-" << endl;
 }
+
 
 void Edit_Student_Information(struct Student *students){
     system("clear");
@@ -364,8 +395,14 @@ void Edit_Student_Information(struct Student *students){
     }
 }
 
+void Add_new_student(struct Student *students){
+    for (int i = 0; i < 9; i++){
+        Edit_Student_Information(students);
+    }
+}
+
 void create_navigation(struct Student *students, int amount_of_students){
-    Draw_List_Of_Students(students, amount_of_students);
+    Draw_List_Of_Students(students, amount_of_students, current);
     char a;
     while((a = getchar()))
     {
@@ -373,12 +410,12 @@ void create_navigation(struct Student *students, int amount_of_students){
             case 115: // s - down
                 system("clear");
                 current_update('+');
-                Draw_List_Of_Students(students, amount_of_students);
+                Draw_List_Of_Students(students, amount_of_students, current);
                 break;
             case 119: // w - up
                 system("clear");
                 current_update('-');
-                Draw_List_Of_Students(students, amount_of_students);
+                Draw_List_Of_Students(students, amount_of_students, current);
                 break;
             case 102: // f - choose
                 system("clear");
@@ -388,24 +425,30 @@ void create_navigation(struct Student *students, int amount_of_students){
                     system("clear");
                     create_navigation(students, amount_of_students);
                 }
+                else if(current == 12){
+                    Add_new_student(students);
+                    current = 0;
+                    system("clear");
+                    create_navigation(students, amount_of_students);
+                }
                 else {
-                    Draw_Task_Menu(students);
+                    Draw_Task_Menu(students, current, current_menu);
                     char b;
                     while((b = getchar())!= 113)
                     {
                         switch ((int)b) {
                             case 115: // s - down
                                 current_menu_update('+');
-                                Draw_Task_Menu(students);
+                                Draw_Task_Menu(students, current, current_menu);
                                 break;
                             case 119: // w - up
                                 current_menu_update('-');
-                                Draw_Task_Menu(students);
+                                Draw_Task_Menu(students, current, current_menu);
                                 break;
                             case 102: // f - choose
                                 system("clear");
                                 Edit_Student_Information(students);
-                                Draw_Task_Menu(students);
+                                Draw_Task_Menu(students, current, current_menu);
                                 break;
                             case 113: // q - quit
                                 break;
@@ -413,7 +456,7 @@ void create_navigation(struct Student *students, int amount_of_students){
                     }
                     current_menu = 0;
                     system("clear");
-                    Draw_List_Of_Students(students, amount_of_students);
+                    Draw_List_Of_Students(students, amount_of_students, current);
                     break;
                 }
             case 113:
@@ -426,29 +469,40 @@ void create_navigation(struct Student *students, int amount_of_students){
     }
 }
 
+
 int main()
 {
-    Student student[11];
-    ifstream fin("students.dat", ios::binary);
+    ifstream fin("students.dat", ios_base::binary);
 
-// Если файл открыт успешно, то читаем данные из него в массив
-    if(fin)
+    if (!fin) {
+        cout << "Failed to open students.dat!";
+        return 1;
+    }
+
+    int count = 0;
+    Student student;
+    while (fin.read((char *)&student, sizeof(Student))) {
+        count++;
+    }
+    fin.close();
+
+    Student *students = new Student[count];
+    ifstream fini("students.dat", ios::binary);
+
+    if(fini)
     {
-        // Считываем по одному элементу массива из файла
-        for(int i = 0; i < 11; i++)
+        for(int i = 0; i < count; i++)
         {
-            fin.read((char*)&student[i], sizeof(Student));
+            fini.read((char*)&students[i], sizeof(Student));
         }
     }
     else
     {
-        // Обработка ошибки открытия файла
         cout << "Ошибка открытия файла!" << endl;
     }
 
-// Закрываем файл
     fin.close();
-    int amounts_of_people = 11;
-    create_navigation(student, amounts_of_people);
+    int amounts_of_people = count;
+    create_navigation(students, amounts_of_people);
     return 0;
 }
