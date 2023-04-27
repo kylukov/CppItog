@@ -18,7 +18,7 @@ using namespace std;
 int current = 0;
 int current_menu = 0;
 
-string commands[10] = {
+string commands[11] = {
         "Добавить/удалить фамилию",
         "Добавить/удалить имя",
         "Добавить/удалить отчество",
@@ -28,14 +28,15 @@ string commands[10] = {
         "Добавить/удалить номер зачетной книжки",
         "Добавить/удалить пол",
         "Добавить/удалить год поступления в ВУЗ" ,
-        "Добавить/удалить дату рождения"
+        "Добавить/удалить дату рождения",
+        "Посмотреть оценки"
 };
 
-struct Lesson {
-    string name_of_lesson;
-    unsigned short mark{};
+struct Lesson
+{
+    char name[40]{};
+    int mark;
 };
-
 
 struct Date {
     unsigned short day;
@@ -55,13 +56,22 @@ struct Student
     char group[40]{};
     char personal_number[40]{};
     char sex[40]{};
-    Lesson marks[2][1];
+    Lesson marks[9][11][2];
 };
 
 /* {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}
-
+*/
 struct Student students[11] = {
-        {"Иванов",     "Иван",       "Иванович",      {01, 02, 2010}, 1975, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М"},
+        {"Иванов",     "Иван",       "Иванович",      {01, 02, 2010}, 1975, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М",
+         {{{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}}},
         {"Кузнецов",   "Тимур",      "Николаевич",    {02, 07, 2012}, 2000, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М"},
         {"Сидоров",    "Николай",    "Андреевич",     {21, 06, 2014}, 1990, "Добрый день",  "ПТ - 1", "МТ-03-19",   "1233Б4123", "М"},
         {"Ковалев",    "Дмитрий",    "Сергеевич",     {15, 12, 2011}, 1985, "Здравствуйте", "ТР - 4", "ИКТ-01-19",  "1234Б4123", "М"},
@@ -73,7 +83,7 @@ struct Student students[11] = {
         {"Григорьева", "Александра", "Александровна", {18, 07, 2016}, 1996, "Здравствуйте", "КДМ-1",  "ФИТ-03-19",  "1240Б4123", "Ж"},
         {"Попов",      "Илья",       "Олегович",      {30, 03, 2013}, 1988, "Добрый день",  "ПТ - 2", "МТ-01-19",   "1241Б4123", "М"}
 };
-*/
+
 
 void download_students(){
     Student students[11];
@@ -109,16 +119,16 @@ void current_update(char operand){
 void current_menu_update(char operand){
     system("clear");
     if (operand == '+'){
-        if (current_menu == 9) current_menu = 0;
+        if (current_menu == 10) current_menu = 0;
         else current_menu++;
     }
     else if (operand == '-'){
-        if (current_menu == 0) current_menu = 9;
+        if (current_menu == 0) current_menu = 10;
         else current_menu--;
     }
 }
 
-void Draw_41_variant_choosen(struct Student* student, int amount_of_students, int current){
+void Draw_41_variant_choosen(struct Student* student, int amount_of_students){
     system("clear");
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
@@ -137,7 +147,7 @@ void Draw_41_variant_choosen(struct Student* student, int amount_of_students, in
     cout.width(64); cout.fill('-'); cout << "-" << endl;
 }
 
-void Draw_Add_New_Student(struct Student* student, int amount_of_students, int current){
+void Draw_Add_New_Student(struct Student* student, int amount_of_students){
     system("clear");
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
@@ -155,7 +165,7 @@ void Draw_Add_New_Student(struct Student* student, int amount_of_students, int c
     cout.width(64); cout.fill('-'); cout << "-" << endl;
 }
 
-void Draw_List_Of_Students(struct Student* student, int amount_of_students, int current) {
+void Draw_List_Of_Students(struct Student* student, int amount_of_students) {
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
@@ -174,10 +184,10 @@ void Draw_List_Of_Students(struct Student* student, int amount_of_students, int 
         cout.width(64); cout.fill('-'); cout << "-" << endl;
     }
     else if(current == 11) {
-        Draw_41_variant_choosen(student, amount_of_students, current);
+        Draw_41_variant_choosen(student, amount_of_students);
     }
     else {
-        Draw_Add_New_Student(student, amount_of_students, current);
+        Draw_Add_New_Student(student, amount_of_students);
     }
 }
 
@@ -270,7 +280,7 @@ void make_41_variant(struct Student *students, int amount_of_students){
 
 }
 
-void Draw_Task_Menu(struct Student* student, int current, int current_menu){
+void Draw_Task_Menu(struct Student* student){
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     /// данные о студенте
     cout << setw( (64 - sizeof("Информация о студенте")) / 2 + sizeof("Информация о студенте")) << setfill(' ') << "Информация о студенте" << endl;
@@ -286,13 +296,36 @@ void Draw_Task_Menu(struct Student* student, int current, int current_menu){
     cout << setw( (64 - sizeof("Выберите команду")) / 2 + sizeof("Выберите команду")) << setfill(' ') << "Выберите команду" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     /// варианты команд
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 11; i++){
         if (i == current_menu) { cout << "  >   "  << setfill(' ') << commands[i] << endl; continue;}
         else cout << "      "  << setfill(' ') << commands[i] << endl;
     }
     cout.width(64); cout.fill('-'); cout << "-" << endl;
 }
 
+void show_marks() {
+    system("clear");
+    char a;
+    while ((a = getchar() != 113)) {
+
+        int chosen_period;
+        cout.width(64); cout.fill('-'); cout << "-" << endl;
+        cout << "Выберите семестр за который хотите посмотреть оценки [1: 9]" << endl;
+        cout << "Для выхода нажмите q" << endl;
+        cout.width(64); cout.fill('-'); cout << "-" << endl;
+        cin >> chosen_period;
+
+        cout.width(64); cout.fill('-'); cout << "-" << endl;
+        cout << "       Оценки за " << chosen_period << " семестр" << endl;
+        cout.width(64); cout.fill('-'); cout << "-" << endl;
+        for (int i = 0; i < 10; i++) {
+            std::cout << "\t" << students[current].marks[chosen_period-1][i][0].name << ": " << students[current].marks[chosen_period-1][i][0].mark
+                      << std::endl;
+        }
+
+
+    }
+}
 
 void Edit_Student_Information(struct Student *students){
     system("clear");
@@ -388,21 +421,32 @@ void Edit_Student_Information(struct Student *students){
             students[current].date.year = year;
             break;
         }
+        case 10:
+        {
+            show_marks();
+        }
         default:
-            cout << "Ошибка отображения навигационного меню, попробуйте снова";
+            cout << "Ошибка отображения навигационного меню, попробуйте снова" << endl;
             current_menu = 0;
             break;
     }
 }
 
 void Add_new_student(struct Student *students){
+    Student new_student[1];
+    cout << "Заполните данные о новом студенте" << endl;
     for (int i = 0; i < 9; i++){
-        Edit_Student_Information(students);
+        Edit_Student_Information(new_student);
     }
+
+    ofstream fouti("new.dat", ios::binary);
+    fouti.write((char*)&new_student[0], sizeof(Student));
+    fouti.close();
+
 }
 
 void create_navigation(struct Student *students, int amount_of_students){
-    Draw_List_Of_Students(students, amount_of_students, current);
+    Draw_List_Of_Students(students, amount_of_students);
     char a;
     while((a = getchar()))
     {
@@ -410,12 +454,12 @@ void create_navigation(struct Student *students, int amount_of_students){
             case 115: // s - down
                 system("clear");
                 current_update('+');
-                Draw_List_Of_Students(students, amount_of_students, current);
+                Draw_List_Of_Students(students, amount_of_students);
                 break;
             case 119: // w - up
                 system("clear");
                 current_update('-');
-                Draw_List_Of_Students(students, amount_of_students, current);
+                Draw_List_Of_Students(students, amount_of_students);
                 break;
             case 102: // f - choose
                 system("clear");
@@ -432,23 +476,23 @@ void create_navigation(struct Student *students, int amount_of_students){
                     create_navigation(students, amount_of_students);
                 }
                 else {
-                    Draw_Task_Menu(students, current, current_menu);
+                    Draw_Task_Menu(students);
                     char b;
                     while((b = getchar())!= 113)
                     {
                         switch ((int)b) {
                             case 115: // s - down
                                 current_menu_update('+');
-                                Draw_Task_Menu(students, current, current_menu);
+                                Draw_Task_Menu(students);
                                 break;
                             case 119: // w - up
                                 current_menu_update('-');
-                                Draw_Task_Menu(students, current, current_menu);
+                                Draw_Task_Menu(students);
                                 break;
                             case 102: // f - choose
                                 system("clear");
                                 Edit_Student_Information(students);
-                                Draw_Task_Menu(students, current, current_menu);
+                                Draw_Task_Menu(students);
                                 break;
                             case 113: // q - quit
                                 break;
@@ -456,7 +500,7 @@ void create_navigation(struct Student *students, int amount_of_students){
                     }
                     current_menu = 0;
                     system("clear");
-                    Draw_List_Of_Students(students, amount_of_students, current);
+                    Draw_List_Of_Students(students, amount_of_students);
                     break;
                 }
             case 113:
@@ -469,40 +513,41 @@ void create_navigation(struct Student *students, int amount_of_students){
     }
 }
 
-
 int main()
 {
-    ifstream fin("students.dat", ios_base::binary);
+    /*
+  ifstream fin("students.dat", ios_base::binary);
 
-    if (!fin) {
-        cout << "Failed to open students.dat!";
-        return 1;
-    }
+  if (!fin) {
+      cout << "Failed to open students.dat!";
+      return 1;
+  }
 
-    int count = 0;
-    Student student;
-    while (fin.read((char *)&student, sizeof(Student))) {
-        count++;
-    }
-    fin.close();
+  int count = 0;
+  Student student;
+  while (fin.read((char *)&student, sizeof(Student))) {
+      count++;
+  }
+  fin.close();
 
-    Student *students = new Student[count];
-    ifstream fini("students.dat", ios::binary);
+ Student *students = new Student[count];
+  ifstream fini("students.dat", ios::binary);
 
-    if(fini)
-    {
-        for(int i = 0; i < count; i++)
-        {
-            fini.read((char*)&students[i], sizeof(Student));
-        }
-    }
-    else
-    {
-        cout << "Ошибка открытия файла!" << endl;
-    }
+  if(fini)
+  {
+      for(int i = 0; i < count; i++)
+      {
+          fini.read((char*)&students[i], sizeof(Student));
+      }
+  }
+  else
+  {
+      cout << "Ошибка открытия файла!" << endl;
+  }
 
-    fin.close();
-    int amounts_of_people = count;
+  fin.close();
+   */
+    int amounts_of_people = sizeof(students) / sizeof(Student);
     create_navigation(students, amounts_of_people);
     return 0;
 }
