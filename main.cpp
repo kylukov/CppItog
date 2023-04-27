@@ -60,7 +60,7 @@ struct Student
 };
 
 /* {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}
-*/
+
 struct Student students[11] = {
         {"Иванов",     "Иван",       "Иванович",      {01, 02, 2010}, 1975, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М",
          {{{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
@@ -83,7 +83,7 @@ struct Student students[11] = {
         {"Григорьева", "Александра", "Александровна", {18, 07, 2016}, 1996, "Здравствуйте", "КДМ-1",  "ФИТ-03-19",  "1240Б4123", "Ж"},
         {"Попов",      "Илья",       "Олегович",      {30, 03, 2013}, 1988, "Добрый день",  "ПТ - 2", "МТ-01-19",   "1241Б4123", "М"}
 };
-
+*/
 
 void download_students(){
     Student students[11];
@@ -303,28 +303,40 @@ void Draw_Task_Menu(struct Student* student){
     cout.width(64); cout.fill('-'); cout << "-" << endl;
 }
 
-void show_marks() {
+void show_marks(struct Student *students) {
     system("clear");
     char a;
-    while ((a = getchar() != 113)) {
-
-        int chosen_period;
-        cout.width(64); cout.fill('-'); cout << "-" << endl;
-        cout << "Выберите семестр за который хотите посмотреть оценки [1: 9]" << endl;
-        cout << "Для выхода нажмите q" << endl;
-        cout.width(64); cout.fill('-'); cout << "-" << endl;
-        cin >> chosen_period;
-
-        cout.width(64); cout.fill('-'); cout << "-" << endl;
-        cout << "       Оценки за " << chosen_period << " семестр" << endl;
-        cout.width(64); cout.fill('-'); cout << "-" << endl;
-        for (int i = 0; i < 10; i++) {
-            std::cout << "\t" << students[current].marks[chosen_period-1][i][0].name << ": " << students[current].marks[chosen_period-1][i][0].mark
-                      << std::endl;
-        }
 
 
+    int chosen_period, pick_to_edit, edited_mark;
+    cout.width(64);cout.fill('-');cout << "-" << endl;
+    cout << "Выберите семестр за который хотите посмотреть оценки [1: 9]" << endl;
+    cout.width(64);cout.fill('-');cout << "-" << endl;
+    cin >> chosen_period;
+
+    cout.width(64);cout.fill('-');cout << "-" << endl;
+    cout << "       Оценки за " << chosen_period << " семестр" << endl;
+    cout.width(64);cout.fill('-');cout << "-" << endl;
+    for (int i = 0; i < 10; i++) {
+        std::cout << "\t" << i + 1 << ". " << students[current].marks[chosen_period - 1][i][0].name << ": "
+                  << students[current].marks[chosen_period - 1][i][0].mark
+                  << std::endl;
     }
+    cout.width(64);
+    cout.fill('-');
+    cout << "-" << endl;
+    cout << "Для выхода нажмите q" << endl;
+    cout << "Для редактирования оценок введите номер строки для редактирования" << endl;
+    cout.width(64);
+    cout.fill('-');
+    cout << "-" << endl;
+    cin >> pick_to_edit;
+
+    cout << "Введите новую оценку для предмета " << students[current].marks[chosen_period][pick_to_edit - 1][0].name
+         << " за " << chosen_period << " семестр ";
+    cin >> edited_mark;
+    students[current].marks[chosen_period][pick_to_edit - 1][0].mark = edited_mark;
+
 }
 
 void Edit_Student_Information(struct Student *students){
@@ -423,7 +435,7 @@ void Edit_Student_Information(struct Student *students){
         }
         case 10:
         {
-            show_marks();
+            show_marks(students);
         }
         default:
             cout << "Ошибка отображения навигационного меню, попробуйте снова" << endl;
@@ -515,7 +527,6 @@ void create_navigation(struct Student *students, int amount_of_students){
 
 int main()
 {
-    /*
   ifstream fin("students.dat", ios_base::binary);
 
   if (!fin) {
@@ -546,8 +557,7 @@ int main()
   }
 
   fin.close();
-   */
-    int amounts_of_people = sizeof(students) / sizeof(Student);
+    int amounts_of_people = count;
     create_navigation(students, amounts_of_people);
     return 0;
 }
