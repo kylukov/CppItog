@@ -106,11 +106,11 @@ void download_students(){
 void current_update(char operand){
     system("clear");
     if (operand == '+'){
-        if (current == 12) current = 0;
+        if (current == 11) current = 0;
         else current++;
     }
     else if (operand == '-'){
-        if (current == 0) current = 12;
+        if (current == 0) current = 11;
         else current--;
     }
 
@@ -143,27 +143,9 @@ void Draw_41_variant_choosen(struct Student* student, int amount_of_students){
     }
 
     cout << "  >   ВАРИАНТ 41" << endl;
-    cout << "      Добавить нового студента" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
 }
 
-void Draw_Add_New_Student(struct Student* student, int amount_of_students){
-    system("clear");
-    cout.width(64); cout.fill('-'); cout << "-" << endl;
-    cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
-    cout.width(64); cout.fill('-'); cout << "-" << endl;
-    for (int i = 0; i < amount_of_students; i++) {
-        string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
-        if (i == current) {
-            cout << "  >   " << setfill(' ') << FIO << endl; continue;
-        }
-        else {
-            cout << "      "  << setfill(' ') << FIO << endl; }
-    }
-    cout << "      ВАРИАНТ 41" << endl;
-    cout << "  >   Добавить нового студента" << endl;
-    cout.width(64); cout.fill('-'); cout << "-" << endl;
-}
 
 void Draw_List_Of_Students(struct Student* student, int amount_of_students) {
     cout.width(64); cout.fill('-'); cout << "-" << endl;
@@ -180,14 +162,10 @@ void Draw_List_Of_Students(struct Student* student, int amount_of_students) {
         }
 
         cout << "      ВАРИАНТ 41" << endl;
-        cout << "      Добавить нового студента" << endl;
         cout.width(64); cout.fill('-'); cout << "-" << endl;
     }
     else if(current == 11) {
         Draw_41_variant_choosen(student, amount_of_students);
-    }
-    else {
-        Draw_Add_New_Student(student, amount_of_students);
     }
 }
 
@@ -444,18 +422,7 @@ void Edit_Student_Information(struct Student *students){
     }
 }
 
-void Add_new_student(struct Student *students){
-    Student new_student[1];
-    cout << "Заполните данные о новом студенте" << endl;
-    for (int i = 0; i < 9; i++){
-        Edit_Student_Information(new_student);
-    }
 
-    ofstream fouti("new.dat", ios::binary);
-    fouti.write((char*)&new_student[0], sizeof(Student));
-    fouti.close();
-
-}
 
 void create_navigation(struct Student *students, int amount_of_students){
     Draw_List_Of_Students(students, amount_of_students);
@@ -477,12 +444,6 @@ void create_navigation(struct Student *students, int amount_of_students){
                 system("clear");
                 if(current == 11) {
                     make_41_variant(students, amount_of_students);
-                    current = 0;
-                    system("clear");
-                    create_navigation(students, amount_of_students);
-                }
-                else if(current == 12){
-                    Add_new_student(students);
                     current = 0;
                     system("clear");
                     create_navigation(students, amount_of_students);
