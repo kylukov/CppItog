@@ -128,7 +128,7 @@ void current_menu_update(char operand){
     }
 }
 
-void Draw_41_variant_choosen(struct Student* student, int amount_of_students){
+void Draw_79_variant_chosen(struct Student* student, int amount_of_students){
     system("clear");
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
@@ -142,10 +142,9 @@ void Draw_41_variant_choosen(struct Student* student, int amount_of_students){
             cout << "      "  << setfill(' ') << FIO << endl; }
     }
 
-    cout << "  >   ВАРИАНТ 41" << endl;
+    cout << "  >   ВАРИАНТ 79" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
 }
-
 
 void Draw_List_Of_Students(struct Student* student, int amount_of_students) {
     cout.width(64); cout.fill('-'); cout << "-" << endl;
@@ -161,102 +160,39 @@ void Draw_List_Of_Students(struct Student* student, int amount_of_students) {
                 cout << "      "  << setfill(' ') << FIO << endl; }
         }
 
-        cout << "      ВАРИАНТ 41" << endl;
+        cout << "      ВАРИАНТ 79" << endl;
         cout.width(64); cout.fill('-'); cout << "-" << endl;
     }
     else if(current == 11) {
-        Draw_41_variant_choosen(student, amount_of_students);
+        Draw_79_variant_chosen(student, amount_of_students);
     }
 }
 
-int show_how_many_male(struct Student *students, int amount_of_students){
-    int amount = 0;
-    for(int i = 0; i < amount_of_students; i++)
-        if (strcmp(students[i].sex, "М") == 0) amount++;
-    return amount;
+bool compareByYear(const Student &a, const Student &b)
+{
+    return a.year < b.year;
 }
 
-int show_how_many_female(struct Student *students, int amount_of_students){
-    int amount = 0;
-    for(int i = 0; i < amount_of_students; i++)
-        if (strcmp(students[i].sex, "Ж") == 0) amount++;
-    return amount;
-}
 
-void make_41_variant(struct Student *students, int amount_of_students){
+void make_79_variant(struct Student *students, int amount_of_students) {
     char b;
-    while((b = getchar())!= 113) {
-        const int male_amount = show_how_many_male(students, amount_of_students);
-        char male[male_amount][128];
-        int male_index = 0;
-        for (int i = 0; i < amount_of_students; i++) {
-            char current_male[128];
-            strcpy(current_male, "");
-            strcpy(male[male_index], "");
-            if (strcmp(students[i].sex, "М") == 0) {
-                strcat(current_male, students[i].surName); strcat(current_male, " ");
-                strcat(current_male, students[i].name); strcat(current_male, " ");
-                strcat(current_male, students[i].thirdName);
-                strcat(male[male_index], current_male);
-                male_index++;
-            }
+    unsigned short *years = new unsigned short[amount_of_students];
+    while ((b = getchar()) != 113) {
+        std::sort(students, students + amount_of_students, compareByYear); // сортировка массива студентов по возрастанию поля year
+
+        std::cout << "После сортировки:" << std::endl;
+        for (int i = 0; i < amount_of_students; ++i)
+        {
+            std::cout << students[i].surName << " " << students[i].name << " " << students[i].thirdName << ", "
+                      << students[i].year << std::endl;
         }
 
-        for (int i = 0; i < male_amount; i++) {
-            for (int j = i + 1; j < male_amount; j++) {
-                if (strcmp(male[i], male[j]) > 0)
-                    swap(male[i], male[j]);
-            }
-        }
-        cout << "        Отсортированые списки" << endl;
-        cout.width(64);
-        cout.fill('-');
-        cout << "-" << endl;
-        cout << "        Мужчины" << endl;
-        cout.width(64);
-        cout.fill('-');
-        cout << "-" << endl;
-        for (int i = 0; i < male_amount; i++) {
-            cout << "      " << male[i] << endl;
-        }
 
-        const int female_amount = show_how_many_female(students, amount_of_students);
-        char female[female_amount][128];
-        int female_index = 0;
-        for (int i = 0; i < amount_of_students; i++) {
-            char current_female[128];
-            strcpy(current_female, "");
-            strcpy(female[female_index], "");
-            if (strcmp(students[i].sex, "Ж") == 0) {
-                strcat(current_female, students[i].surName); strcat(current_female, " ");
-                strcat(current_female, students[i].name); strcat(current_female, " ");
-                strcat(current_female, students[i].thirdName);
-                strcat(female[female_index], current_female);
-                female_index++;
-            }
-        }
-        cout.width(64); cout.fill('-'); cout << "-" << endl;
-        cout << "        Женщины" << endl;
-        cout.width(64); cout.fill('-'); cout << "-" << endl;
-
-        for (int i = 0; i < female_amount; i++) {
-            for (int j = i + 1; j < female_amount; j++) {
-                if (strcmp(female[i], female[j]) > 0) {
-                    swap(female[i], female[j]);
-                }
-            }
-        }
-
-        for (int i = 0; i < female_amount; i++) {
-            cout << "      " << female[i] << endl;
-        }
-        cout.width(64);
-        cout.fill('-');
-        cout << "-" << endl;
     }
-
-
 }
+
+
+
 
 void Draw_Task_Menu(struct Student* student){
     cout.width(64); cout.fill('-'); cout << "-" << endl;
@@ -422,8 +358,6 @@ void Edit_Student_Information(struct Student *students){
     }
 }
 
-
-
 void create_navigation(struct Student *students, int amount_of_students){
     Draw_List_Of_Students(students, amount_of_students);
     char a;
@@ -443,7 +377,7 @@ void create_navigation(struct Student *students, int amount_of_students){
             case 102: // f - choose
                 system("clear");
                 if(current == 11) {
-                    make_41_variant(students, amount_of_students);
+                    make_79_variant(students, amount_of_students);
                     current = 0;
                     system("clear");
                     create_navigation(students, amount_of_students);
