@@ -17,6 +17,7 @@ using namespace std;
 
 int current = 0;
 int current_menu = 0;
+int amount_of_deleted_students = 0;
 
 string commands[12] = {
         "Добавить/удалить фамилию",
@@ -112,7 +113,7 @@ void Draw_List_Of_Students(struct Student* student, int amount_of_students) {
     cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     if (current != amount_of_students+1){
-        for (int i = 0; i < amount_of_students; i++) {
+        for (int i = 0; i < amount_of_students-amount_of_deleted_students; i++) {
             string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
             if (i == current) {
                 cout << "  >   " << setfill(' ') << FIO << endl; continue;
@@ -283,6 +284,7 @@ void delete_student(struct Student *students, int amount_of_students){
     }
 
     amount_of_students--;
+    amount_of_deleted_students++;
 
 
     ofstream fout("students.dat", ios::binary);
@@ -553,8 +555,11 @@ int main()
             {"Попов",      "Илья",       "Олегович",      {30, 03, 2013}, 1988, "Добрый день",  "ПТ - 2", "МТ-01-19",   "1241Б4123", "М"}
     };
 
-    int amounts_of_people = sizeof(students) / sizeof(Student);
-     */
+    ofstream fout("students.dat", ios::binary);
+    for(int i = 0; i < 11; i++)
+        fout.write((char*)&students[i], sizeof(Student));
+    fout.close();
+*/
     create_navigation();
     return 0;
 }
