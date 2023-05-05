@@ -15,7 +15,7 @@
 
 using namespace std;
 
-int current = 0;
+int currentStudent = 0;
 int current_menu = 0;
 int amount_of_deleted_students = 0;
 
@@ -65,20 +65,20 @@ struct Student
 */
 
 
-void current_update(char operand, int amount_of_students){
+void updatePositionOnStudentMenu(char operand, int amount_of_students){
     system("clear");
     if (operand == '+'){
-        if (current == amount_of_students-amount_of_deleted_students) current = 0;
-        else current++;
+        if (currentStudent == amount_of_students - amount_of_deleted_students) currentStudent = 0;
+        else currentStudent++;
     }
     else if (operand == '-'){
-        if (current == 0) current = amount_of_students-amount_of_deleted_students;
-        else current--;
+        if (currentStudent == 0) currentStudent = amount_of_students - amount_of_deleted_students;
+        else currentStudent--;
     }
 
 }
 
-void current_menu_update(char operand){
+void updatePositionOnEditingMenu(char operand){
     system("clear");
     if (operand == '+'){
         if (current_menu == 11) current_menu = 0;
@@ -97,7 +97,7 @@ void Draw_79_variant_chosen(struct Student* student, int amount_of_students){
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     for (int i = 0; i < amount_of_students-amount_of_deleted_students; i++) {
         string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
-        if (i == current) {
+        if (i == currentStudent) {
             cout << "  >   " << setfill(' ') << FIO << endl; continue;
         }
         else {
@@ -108,14 +108,14 @@ void Draw_79_variant_chosen(struct Student* student, int amount_of_students){
     cout.width(64); cout.fill('-'); cout << "-" << endl;
 }
 
-void Draw_List_Of_Students(struct Student* student, int amount_of_students) {
+void DrawAllStudentsMenu(struct Student* student, int amount_of_students) {
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
-    if (current != amount_of_students){
+    if (currentStudent != amount_of_students){
         for (int i = 0; i < amount_of_students; i++) {
             string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
-            if (i == current) {
+            if (i == currentStudent) {
                 cout << "  >   " << setfill(' ') << FIO << endl; continue;
             }
             else {
@@ -125,7 +125,7 @@ void Draw_List_Of_Students(struct Student* student, int amount_of_students) {
         cout << "      ВАРИАНТ 79" << endl;
         cout.width(64); cout.fill('-'); cout << "-" << endl;
     }
-    else if(current == 11) {
+    else if(currentStudent == 11) {
         Draw_79_variant_chosen(student, amount_of_students);
     }
 }
@@ -136,7 +136,7 @@ bool compareByYear(const Student &a, const Student &b)
 }
 
 
-void make_79_variant(struct Student *students, int amount_of_students) {
+void make79Variant(struct Student *students, int amount_of_students) {
     char b;
     unsigned short *years = new unsigned short[amount_of_students];
     while ((b = getchar()) != 113) {
@@ -156,18 +156,17 @@ void make_79_variant(struct Student *students, int amount_of_students) {
 
 
 
-void Draw_Task_Menu(struct Student* student){
+void drawTaskMenu(struct Student* student){
     cout.width(64); cout.fill('-'); cout << "-" << endl;
-    /// данные о студенте
     cout << setw( (64 - sizeof("Информация о студенте")) / 2 + sizeof("Информация о студенте")) << setfill(' ') << "Информация о студенте" << endl;
-    cout << "      ФИО: " << student[current].surName << " " << student[current].name << " " << student[current].thirdName << endl;
-    cout << "      Кафедра: " << student[current].cafedra << endl;
-    cout << "      Факультет: " << student[current].fac << endl;
-    cout << "      Группа: " << student[current].group << endl;
-    cout << "      Номер зачетной книжки: " << student[current].personal_number << endl;
-    cout << "      Пол: " << student[current].sex << endl;
-    cout << "      Год поступления в ВУЗ: " << student[current].date.day << "." << student[current].date.month << "." << student[current].date.year << endl;
-    cout << "      Дата рождения: " << student[current].year << endl;
+    cout << "      ФИО: " << student[currentStudent].surName << " " << student[currentStudent].name << " " << student[currentStudent].thirdName << endl;
+    cout << "      Кафедра: " << student[currentStudent].cafedra << endl;
+    cout << "      Факультет: " << student[currentStudent].fac << endl;
+    cout << "      Группа: " << student[currentStudent].group << endl;
+    cout << "      Номер зачетной книжки: " << student[currentStudent].personal_number << endl;
+    cout << "      Пол: " << student[currentStudent].sex << endl;
+    cout << "      Год поступления в ВУЗ: " << student[currentStudent].date.day << "." << student[currentStudent].date.month << "." << student[currentStudent].date.year << endl;
+    cout << "      Дата рождения: " << student[currentStudent].year << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     cout << setw( (64 - sizeof("Выберите команду")) / 2 + sizeof("Выберите команду")) << setfill(' ') << "Выберите команду" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
@@ -194,8 +193,8 @@ void show_marks(struct Student *students) {
     cout << "       Оценки за " << chosen_period << " семестр" << endl;
     cout.width(64);cout.fill('-');cout << "-" << endl;
     for (int i = 0; i < 5; i++) {
-        std::cout << "\t" << i + 1 << ". " << students[current].marks[chosen_period - 1][i][0].name << ": "
-                  << students[current].marks[chosen_period - 1][i][0].mark
+        std::cout << "\t" << i + 1 << ". " << students[currentStudent].marks[chosen_period - 1][i][0].name << ": "
+                  << students[currentStudent].marks[chosen_period - 1][i][0].mark
                   << std::endl;
     }
     cout.width(64);
@@ -208,15 +207,15 @@ void show_marks(struct Student *students) {
     cout << "-" << endl;
     cin >> pick_to_edit;
 
-    cout << "Введите новую оценку для предмета " << students[current].marks[chosen_period][pick_to_edit - 1][0].name
+    cout << "Введите новую оценку для предмета " << students[currentStudent].marks[chosen_period][pick_to_edit - 1][0].name
          << " за " << chosen_period << " семестр ";
     cin >> edited_mark;
-    students[current].marks[chosen_period][pick_to_edit - 1][0].mark = edited_mark;
+    students[currentStudent].marks[chosen_period][pick_to_edit - 1][0].mark = edited_mark;
 
 }
 
 void delete_student(struct Student *students, int amount_of_students){
-    for (int i = current; i < amount_of_students - 1; i++) {
+    for (int i = currentStudent; i < amount_of_students - 1; i++) {
         students[i] = students[i + 1];
     }
 
@@ -238,7 +237,7 @@ void Edit_Student_Information(struct Student *students, int amount_of_students){
             char edited_surname[40];
             cout << commands[0] << endl;
             cin >> edited_surname;
-            strcpy(students[current].surName, edited_surname);
+            strcpy(students[currentStudent].surName, edited_surname);
             break;
         }
         case 1:
@@ -246,7 +245,7 @@ void Edit_Student_Information(struct Student *students, int amount_of_students){
             char edited_name[40];
             cout << commands[1] << endl;
             cin >> edited_name;
-            strcpy(students[current].name, edited_name);
+            strcpy(students[currentStudent].name, edited_name);
             break;
         }
         case 2:
@@ -254,7 +253,7 @@ void Edit_Student_Information(struct Student *students, int amount_of_students){
             char edited_thirdname[40];
             cout << commands[2] << endl;
             cin >> edited_thirdname;
-            strcpy(students[current].thirdName, edited_thirdname);
+            strcpy(students[currentStudent].thirdName, edited_thirdname);
             break;
         }
         case 3:
@@ -262,7 +261,7 @@ void Edit_Student_Information(struct Student *students, int amount_of_students){
             char edited_cafedra[40];
             cout << commands[3] << endl;
             cin >> edited_cafedra;
-            strcpy(students[current].cafedra, edited_cafedra);
+            strcpy(students[currentStudent].cafedra, edited_cafedra);
             break;
         }
         case 4:
@@ -270,7 +269,7 @@ void Edit_Student_Information(struct Student *students, int amount_of_students){
             char edited_fac[40];
             cout << commands[4] << endl;
             cin >> edited_fac;
-            strcpy(students[current].fac, edited_fac);
+            strcpy(students[currentStudent].fac, edited_fac);
             break;
         }
         case 5:
@@ -278,7 +277,7 @@ void Edit_Student_Information(struct Student *students, int amount_of_students){
             char edited_group[40];
             cout << commands[5] << endl;
             cin >> edited_group;
-            strcpy(students[current].group, edited_group);
+            strcpy(students[currentStudent].group, edited_group);
             break;
         }
         case 6:
@@ -286,7 +285,7 @@ void Edit_Student_Information(struct Student *students, int amount_of_students){
             char edited_personal_number[40];
             cout << commands[6] << endl;
             cin >> edited_personal_number;
-            strcpy(students[current].personal_number, edited_personal_number);
+            strcpy(students[currentStudent].personal_number, edited_personal_number);
             break;
         }
         case 7:
@@ -295,7 +294,7 @@ void Edit_Student_Information(struct Student *students, int amount_of_students){
             cout << commands[7] << endl;
             cout << "M - мужской; Ж - женский" << endl;
             cin >> edited_sex;
-            strcpy(students[current].sex, edited_sex);
+            strcpy(students[currentStudent].sex, edited_sex);
             break;
         }
         case 8:
@@ -303,7 +302,7 @@ void Edit_Student_Information(struct Student *students, int amount_of_students){
             unsigned short edited_year;
             cout << commands[8] << endl;
             cin >> edited_year;
-            students[current].year = edited_year;
+            students[currentStudent].year = edited_year;
             break;
         }
         case 9:
@@ -319,9 +318,9 @@ void Edit_Student_Information(struct Student *students, int amount_of_students){
 
             cout << "Введите год: ";
             cin >> year;
-            students[current].date.day = day;
-            students[current].date.month = month;
-            students[current].date.year = year;
+            students[currentStudent].date.day = day;
+            students[currentStudent].date.month = month;
+            students[currentStudent].date.year = year;
             break;
         }
         case 10:
@@ -341,7 +340,7 @@ void Edit_Student_Information(struct Student *students, int amount_of_students){
     }
 }
 
-void create_navigation(){
+void createNavigation(){
     ifstream fin("students.dat", ios_base::binary);
 
     if (!fin) {
@@ -373,47 +372,47 @@ void create_navigation(){
     int amount_of_students = count;
     fin.close();
 
-    Draw_List_Of_Students(students, count);
+    DrawAllStudentsMenu(students, count);
     char a;
     while((a = getchar()))
     {
         switch ((int)a) {
             case 115: // s - down
                 system("clear");
-                current_update('+', amount_of_students);
-                Draw_List_Of_Students(students, amount_of_students);
+                updatePositionOnStudentMenu('+', amount_of_students);
+                DrawAllStudentsMenu(students, amount_of_students);
                 break;
             case 119: // w - up
                 system("clear");
-                current_update('-', amount_of_students);
-                Draw_List_Of_Students(students, amount_of_students);
+                updatePositionOnStudentMenu('-', amount_of_students);
+                DrawAllStudentsMenu(students, amount_of_students);
                 break;
             case 102: // f - choose
                 system("clear");
-                if(current == 11) {
-                    make_79_variant(students, amount_of_students);
-                    current = 0;
+                if(currentStudent == 11) {
+                    make79Variant(students, amount_of_students);
+                    currentStudent = 0;
                     system("clear");
-                    create_navigation();
+                    createNavigation();
                 }
                 else {
-                    Draw_Task_Menu(students);
+                    drawTaskMenu(students);
                     char b;
                     while((b = getchar())!= 113)
                     {
                         switch ((int)b) {
                             case 115: // s - down
-                                current_menu_update('+');
-                                Draw_Task_Menu(students);
+                                updatePositionOnEditingMenu('+');
+                                drawTaskMenu(students);
                                 break;
                             case 119: // w - up
-                                current_menu_update('-');
-                                Draw_Task_Menu(students);
+                                updatePositionOnEditingMenu('-');
+                                drawTaskMenu(students);
                                 break;
                             case 102: // f - choose
                                 system("clear");
                                 Edit_Student_Information(students,amount_of_students);
-                                Draw_Task_Menu(students);
+                                drawTaskMenu(students);
                                 break;
                             case 113: // q - quit
                                 break;
@@ -421,7 +420,7 @@ void create_navigation(){
                     }
                     current_menu = 0;
                     system("clear");
-                    Draw_List_Of_Students(students, amount_of_students);
+                    DrawAllStudentsMenu(students, amount_of_students);
                     break;
                 }
             case 113:
@@ -436,39 +435,6 @@ void create_navigation(){
 
 int main()
 {
-    /*
-  ifstream fin("students.dat", ios_base::binary);
-
-  if (!fin) {
-      cout << "Failed to open students.dat!";
-      return 1;
-  }
-
-  int count = 0;
-  Student student;
-  while (fin.read((char *)&student, sizeof(Student))) {
-      count++;
-  }
-  fin.close();
-
- Student *students = new Student[count];
-  ifstream fini("students.dat", ios::binary);
-
-  if(fini)
-  {
-      for(int i = 0; i < count; i++)
-      {
-          fini.read((char*)&students[i], sizeof(Student));
-      }
-  }
-  else
-  {
-      cout << "Ошибка открытия файла!" << endl;
-  }
-
-  fin.close();
-
-*/
     struct Student students[11] = {
             {"Иванов",     "Иван",       "Иванович",      {01, 02, 2010}, 1975, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М",
                     {{{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
@@ -497,6 +463,6 @@ int main()
         fout.write((char*)&students[i], sizeof(Student));
     fout.close();
 
-    create_navigation();
+    createNavigation();
     return 0;
 }
