@@ -46,20 +46,19 @@ struct Date {
     unsigned short year;
 };
 
-class Student
+struct Student
 {
-    public:
-        char surName[40]{};
-        char name[40]{};
-        char thirdName[40]{};
-        struct Date date{};
-        unsigned short year{};
-        char fac[40]{};
-        char cafedra[40]{};
-        char group[40]{};
-        char personal_number[40]{};
-        char sex[40]{};
-        Lesson marks[9][11][2];
+    char surName[40]{};
+    char name[40]{};
+    char thirdName[40]{};
+    struct Date date{};
+    unsigned short year{};
+    char fac[40]{};
+    char cafedra[40]{};
+    char group[40]{};
+    char personal_number[40]{};
+    char sex[40]{};
+    Lesson marks[9][11][2];
 };
 
 /* {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}
@@ -69,11 +68,11 @@ class Student
 void current_update(char operand, int amount_of_students){
     system("clear");
     if (operand == '+'){
-        if (current == amount_of_students+1) current = 0;
+        if (current == amount_of_students-amount_of_deleted_students) current = 0;
         else current++;
     }
     else if (operand == '-'){
-        if (current == 0) current = amount_of_students+1;
+        if (current == 0) current = amount_of_students-amount_of_deleted_students;
         else current--;
     }
 
@@ -91,12 +90,12 @@ void current_menu_update(char operand){
     }
 }
 
-void draw41VariantChosen(struct Student* student, int amount_of_students){
+void Draw_41_variant_choosen(struct Student* student, int amount_of_students){
     system("clear");
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
-    for (int i = 0; i < amount_of_students; i++) {
+    for (int i = 0; i < amount_of_students-amount_of_deleted_students; i++) {
         string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
         if (i == current) {
             cout << "  >   " << setfill(' ') << FIO << endl; continue;
@@ -113,8 +112,8 @@ void Draw_List_Of_Students(struct Student* student, int amount_of_students) {
     cout.width(64); cout.fill('-'); cout << "-" << endl;
     cout << setw( (64 - sizeof("Список студентов")) / 2 + sizeof("Список студентов")) << setfill(' ') << "Список студентов" << endl;
     cout.width(64); cout.fill('-'); cout << "-" << endl;
-    if (current != amount_of_students+1-amount_of_deleted_students){
-        for (int i = 0; i < amount_of_students-amount_of_deleted_students; i++) {
+    if (current != amount_of_students){
+        for (int i = 0; i < amount_of_students; i++) {
             string FIO = to_string(i+1) + " " + student[i].surName + " " + student[i].name + " " + student[i].thirdName + " " + student[i].group;
             if (i == current) {
                 cout << "  >   " << setfill(' ') << FIO << endl; continue;
@@ -127,7 +126,7 @@ void Draw_List_Of_Students(struct Student* student, int amount_of_students) {
         cout.width(64); cout.fill('-'); cout << "-" << endl;
     }
     else if(current == 11) {
-        draw41VariantChosen(student, amount_of_students);
+        Draw_41_variant_choosen(student, amount_of_students);
     }
 }
 
@@ -151,7 +150,7 @@ void make_41_variant(struct Student *students, int amount_of_students){
         const int male_amount = show_how_many_male(students, amount_of_students);
         char male[male_amount][128];
         int male_index = 0;
-        for (int i = 0; i < amount_of_students; i++) {
+        for (int i = 0; i < amount_of_students-amount_of_deleted_students; i++) {
             char current_male[128];
             strcpy(current_male, "");
             strcpy(male[male_index], "");
@@ -500,6 +499,67 @@ void create_navigation(){
 
 int main()
 {
+    /*
+  ifstream fin("students.dat", ios_base::binary);
+
+  if (!fin) {
+      cout << "Failed to open students.dat!";
+      return 1;
+  }
+
+  int count = 0;
+  Student student;
+  while (fin.read((char *)&student, sizeof(Student))) {
+      count++;
+  }
+  fin.close();
+
+ Student *students = new Student[count];
+  ifstream fini("students.dat", ios::binary);
+
+  if(fini)
+  {
+      for(int i = 0; i < count; i++)
+      {
+          fini.read((char*)&students[i], sizeof(Student));
+      }
+  }
+  else
+  {
+      cout << "Ошибка открытия файла!" << endl;
+  }
+
+  fin.close();
+
+*/
+    struct Student students[11] = {
+            {"Иванов",     "Иван",       "Иванович",      {01, 02, 2010}, 1975, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М",
+                    {{{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+                            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+                            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+                            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+                            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+                            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+                            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+                            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}},
+                            {{"Физическая культура", 5}, {"Математика", 4}, {"Биология", 5}, {"Литература", 3}, {"Физика", 4}, {"Философия", 3}, {"Химия", 5}, {"Английский язык", 4}, {"Информатика", 5}, {"История", 5}}}},
+            {"Кузнецов",   "Тимур",      "Николаевич",    {02, 07, 2012}, 2000, "Привет",       "КБ - 2", "БИСО-01-19", "1231Б4123", "М"},
+            {"Сидоров",    "Николай",    "Андреевич",     {21, 06, 2014}, 1990, "Добрый день",  "ПТ - 1", "МТ-03-19",   "1233Б4123", "М"},
+            {"Ковалев",    "Дмитрий",    "Сергеевич",     {15, 12, 2011}, 1985, "Здравствуйте", "ТР - 4", "ИКТ-01-19",  "1234Б4123", "М"},
+            {"Новикова",   "Елена",      "Ивановна",      {03, 01, 2015}, 1995, "Добрый день",  "КБ - 1", "БИСО-02-19", "1235Б4123", "Ж"},
+            {"Федоров",    "Вячеслав",   "Игоревич",      {22, 05, 2016}, 1996, "Привет",       "КДМ-2",  "ФИТ-01-19",  "1236Б4123", "М"},
+            {"Шишкин",     "Анатолий",   "Петрович",      {10, 01, 2018}, 2000, "Здравствуйте", "ПТ - 3", "МТ-02-19",   "1237Б4123", "М"},
+            {"Козлова",    "Анастасия",  "Васильевна",    {27, 11, 2017}, 1999, "Добрый день",  "ТР - 1", "ИКТ-02-19",  "1238Б4123", "Ж"},
+            {"Михайлов",   "Максим",     "Валерьевич",    {05, 02, 2019}, 2001, "Привет",       "КБ - 3", "БИСО-03-19", "1239Б4123", "М"},
+            {"Григорьева", "Александра", "Александровна", {18, 07, 2016}, 1996, "Здравствуйте", "КДМ-1",  "ФИТ-03-19",  "1240Б4123", "Ж"},
+            {"Попов",      "Илья",       "Олегович",      {30, 03, 2013}, 1988, "Добрый день",  "ПТ - 2", "МТ-01-19",   "1241Б4123", "М"}
+    };
+
+    ofstream fout("students.dat", ios::binary);
+    for(int i = 0; i < 11; i++)
+        fout.write((char*)&students[i], sizeof(Student));
+    fout.close();
+
     create_navigation();
     return 0;
 }
